@@ -1,27 +1,29 @@
 package com.ReadingForGeeks.library.service;
 
-import java.util.List;
-import java.util.Optional;
 
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.ReadingForGeeks.library.model.Books;
 import com.ReadingForGeeks.library.repository.BooksRepository;
 
-import jakarta.persistence.EntityNotFoundException;
+
 
 @Service
 public class BookService {
 
 	public BooksRepository repo;
 
+	@Autowired
 	public BookService(BooksRepository repo) {
 		super();
 		this.repo = repo;
 	}
-	
+
 
 	public List<Books> getAllBooks() {
 		return repo.findAll();
@@ -109,12 +111,18 @@ public class BookService {
 		}
 	}
 
-
 	public void deleteByid(int id) {
            repo.deleteById(id);
 		}
-		
-	
 
-}
+
+	public void delete(Books book) {
+		repo.delete(book);
+		
+	}
+	
+	}
+
+
+
 

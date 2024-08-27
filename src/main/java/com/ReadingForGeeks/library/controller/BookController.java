@@ -1,6 +1,8 @@
 package com.ReadingForGeeks.library.controller;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,19 +14,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ReadingForGeeks.library.model.Books;
 import com.ReadingForGeeks.library.service.BookService;
+import com.ReadingForGeeks.library.service.bookListService;
 
 @RestController
 @RequestMapping("/library")
 public class BookController {
+	public BookController() {}
 	
-
+	    @Autowired
+	    public BookService service;
+	    public BookController(BookService service) {
+	        this.service = service;
+	    }
+	    
+	    @Autowired
+	    public bookListService bookListService;
+	public BookController(bookListService bookListService) {
+			this.bookListService = bookListService;
+		}
 	
-	public BookService service;
-	public BookController(BookService service) {
-		super();
-		this.service = service;
-	}
-
+	
 
 	@GetMapping("/allbooks")
 	public ResponseEntity<?> getAllBooks() {
@@ -78,7 +87,8 @@ public class BookController {
 		return service.addBook(book);
 	}
 	
-	@DeleteMapping("/delete/{id}")
+	
+	@DeleteMapping("/delete-id/{id}")
 	public ResponseEntity<?> deleteByid(@PathVariable int id){
 		try {
 		Books book = service.getBookById(id);
@@ -90,10 +100,32 @@ public class BookController {
 		
 		
 		
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
 		}
+		
 	}
+	
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> delete(@RequestBody Books book){
+		try {
+			List<Books> books = service.getAllBooks();
+			for(Books book1 : books) {
+				
+				if(book1.equals(book)) {
+			       service.delete(book);
+			         return ResponseEntity.ok(book+"\nDeleted successfully..!");
+				}
+			}
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("This book doesn't exist!");
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occured "+e.getMessage());
+		} 
+		
+	}
+	
+	
 	
 	
 	
