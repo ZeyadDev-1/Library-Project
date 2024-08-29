@@ -1,0 +1,6 @@
+Important Notes:
+
+Steps to run the project:
+- To run this project in your machine, make sure to change database configuration in (application.properties) file with what is applicable with your database properties.
+
+Thank you.
